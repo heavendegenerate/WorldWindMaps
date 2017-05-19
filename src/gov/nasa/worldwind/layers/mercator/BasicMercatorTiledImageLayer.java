@@ -14,6 +14,7 @@ import gov.nasa.worldwind.geom.*;
 import gov.nasa.worldwind.render.DrawContext;
 import gov.nasa.worldwind.retrieve.*;
 import gov.nasa.worldwind.util.*;
+import util.TransparentImageUtil;
 
 import javax.imageio.ImageIO;
 import java.awt.image.*;
@@ -29,7 +30,9 @@ import java.nio.ByteBuffer;
  */
 public class BasicMercatorTiledImageLayer extends MercatorTiledImageLayer
 {
-    private final Object fileLock = new Object();
+    //private final Object fileLock = new Object();
+    //2017-5-19
+    protected  final Object fileLock = new Object();
 
     public BasicMercatorTiledImageLayer(LevelSet levelSet)
     {
@@ -159,7 +162,7 @@ public class BasicMercatorTiledImageLayer extends MercatorTiledImageLayer
         }
     }
 
-    private boolean isTextureExpired(MercatorTextureTile tile,
+    public boolean isTextureExpired(MercatorTextureTile tile,
         java.net.URL textureURL)
     {
         if (!WWIO.isFileOutOfDate(textureURL, tile.getLevel().getExpiryTime()))
@@ -278,11 +281,11 @@ public class BasicMercatorTiledImageLayer extends MercatorTiledImageLayer
         }
     }
 
-    private static class DownloadPostProcessor implements
+    public static class DownloadPostProcessor implements
         RetrievalPostProcessor
     {
         // TODO: Rewrite this inner class, factoring out the generic parts.
-        private final MercatorTextureTile tile;
+        protected final MercatorTextureTile tile;
         private final BasicMercatorTiledImageLayer layer;
 
         public DownloadPostProcessor(MercatorTextureTile tile,
@@ -463,11 +466,14 @@ public class BasicMercatorTiledImageLayer extends MercatorTiledImageLayer
         }
     }
 
-    private BufferedImage transform(BufferedImage image, MercatorSector sector)
+    protected BufferedImage transform(BufferedImage image, MercatorSector sector)
     {
-        int type = image.getType();
-        if (type == 0)
-            type = BufferedImage.TYPE_INT_RGB;
+//        int type = image.getType();
+//        //System.out.println("image type:"+image.getType());
+//        if (type == 0)
+//            type = BufferedImage.TYPE_INT_RGB;
+        //2017-5-19
+        int type = BufferedImage.TYPE_INT_ARGB;
         BufferedImage trans = new BufferedImage(image.getWidth(), image
             .getHeight(), type);
         double miny = sector.getMinLatPercent();
@@ -484,7 +490,10 @@ public class BasicMercatorTiledImageLayer extends MercatorTiledImageLayer
 
             for (int x = 0; x < image.getWidth(); x++)
             {
+                //System.out.println("image.getRGB:" + Integer.toHexString(image.getRGB(x,iy)));
                 trans.setRGB(x, y, image.getRGB(x, iy));
+                //System.out.println("trans.getRGB:" + Integer.toHexString(trans.getRGB(x,y)));
+
             }
         }
         return trans;

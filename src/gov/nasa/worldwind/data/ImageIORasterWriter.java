@@ -49,6 +49,7 @@ public class ImageIORasterWriter extends AbstractDataRasterWriter
 
     protected void doWrite(DataRaster raster, String formatSuffix, java.io.File file) throws java.io.IOException
     {
+        System.out.println("doWrite");
         this.writeImage(raster, formatSuffix, file);
 
         if (this.isWriteGeoreferenceFiles())
@@ -67,6 +68,7 @@ public class ImageIORasterWriter extends AbstractDataRasterWriter
 
     protected void writeImage(DataRaster raster, String formatSuffix, java.io.File file) throws java.io.IOException
     {
+        System.out.println("writeImage");
         BufferedImageRaster bufferedImageRaster = (BufferedImageRaster) raster;
         java.awt.image.BufferedImage image = bufferedImageRaster.getBufferedImage();
         javax.imageio.ImageIO.write(image, formatSuffix, file);

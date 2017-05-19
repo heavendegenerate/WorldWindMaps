@@ -13,13 +13,13 @@ import gov.nasa.worldwind.util.*;
 
 import java.net.*;
 
-public class TiandituMercatorSateLayer extends BasicMercatorTiledImageLayer {
-    public static final String LAYERNAME = "Tianditu Mercator Sate";
+public class TiandituMercatorSateLabelENLayer extends BasicMercatorTiledImageLayer {
+    public static final String LAYERNAME = "Tianditu Mercator Sate Label EN";
 
-    public TiandituMercatorSateLayer() {
+    public TiandituMercatorSateLabelENLayer() {
         super(makeLevels());
+        this.setUseTransparentTextures(true);
         this.setName(LAYERNAME);
-
     }
 
     private static LevelSet makeLevels() {
@@ -29,9 +29,9 @@ public class TiandituMercatorSateLayer extends BasicMercatorTiledImageLayer {
         params.setValue(AVKey.TILE_HEIGHT, 256);
         params.setValue(AVKey.DISPLAY_NAME, LAYERNAME);
         params.setValue(AVKey.NAME, LAYERNAME);
-        params.setValue(AVKey.DATA_CACHE_NAME, "Tianditu/SateMercator");
-        params.setValue(AVKey.SERVICE, "http://t0.tianditu.com/img_w/wmts");
-        params.setValue(AVKey.LAYER_NAME, "img");
+        params.setValue(AVKey.DATA_CACHE_NAME, "Tianditu/SateLabelENMercator");
+        params.setValue(AVKey.SERVICE, "http://t0.tianditu.com/eia_w/wmts");
+        params.setValue(AVKey.LAYER_NAME, "eia");
         params.setValue(AVKey.DATASET_NAME, LAYERNAME);
         params.setValue(AVKey.FORMAT_SUFFIX, ".png");		//瓦片格式
         params.setValue(AVKey.NUM_LEVELS, 16);				//瓦片级数
@@ -42,6 +42,7 @@ public class TiandituMercatorSateLayer extends BasicMercatorTiledImageLayer {
         //params.setValue(AVKey.SECTOR, Sector.FULL_SPHERE);	//覆盖范围（全球）
         params.setValue(AVKey.SECTOR, new MercatorSector(-1.0, 1.0, Angle.NEG180, Angle.POS180));
         params.setValue(AVKey.TILE_URL_BUILDER, new URLBuilder());//URL请求
+
 
         return new LevelSet(params);
     }
@@ -58,10 +59,11 @@ public class TiandituMercatorSateLayer extends BasicMercatorTiledImageLayer {
             String serverURL = tile.getLevel().getService().replaceFirst("0", String.valueOf((int)(Math.random() * 8)));
             //System.out.println("serverURL:"+serverURL);
             //tile URL
-            String fullurl = "http://t0.tianditu.com/DataServer?T=img_w&x="+col+"&y="+row+"&l="+level;
-            //String fullurl =  serverURL +
-                //"?service=wmts&request=GetTile&version=1.0.0&LAYER=img&tileMatrixSet=w&TileMatrix="+ level + "&TileRow="+ row +"&TileCol="+col+"&style=default&format=tiles";
-                //"?request=GetTile&service=wmts&version=1.0.0&serviceMode=kvp&layer=img&Style=default&Format=tiles&TileMatrixSet=w&TileMatrix="+level+"&TileRow="+row+"&TileCol=" + col;
+            //String fullurl = "http://t0.tianditu.com/DataServer?T=eia_w&x="+col+"&y="+row+"&l="+level;
+            String fullurl =  serverURL +
+                "?service=wmts&request=GetTile&version=1.0.0&LAYER=eia&tileMatrixSet=w&TileMatrix="+ level + "&TileRow="+ row +"&TileCol="+col+"&style=default&format=tiles";
+                //"?request=GetTile&service=wmts&version=1.0.0&serviceMode=kvp&layer=eia&Style=default&Format=tiles&TileMatrixSet=w&TileMatrix="+level+"&TileRow="+row+"&TileCol=" + col;
+            //fullurl = fullurl.replaceFirst("0", String.valueOf((int)(Math.random() * 8)));
             System.out.println("fullurl:"+fullurl);
             return new URL(fullurl);
         }

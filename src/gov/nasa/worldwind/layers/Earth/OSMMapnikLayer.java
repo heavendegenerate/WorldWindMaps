@@ -19,7 +19,9 @@ public class OSMMapnikLayer extends BasicMercatorTiledImageLayer
 {
     public OSMMapnikLayer()
     {
+
         super(makeLevels());
+        System.out.println("OSMMapnikLayer()");
     }
 
     private static LevelSet makeLevels()

@@ -11,10 +11,11 @@ import gov.nasa.worldwind.awt.WorldWindowGLCanvas;
 import gov.nasa.worldwind.event.*;
 import gov.nasa.worldwind.exception.WWAbsentRequirementException;
 import gov.nasa.worldwind.layers.*;
+import gov.nasa.worldwind.layers.Earth.*;
 import gov.nasa.worldwind.layers.placename.PlaceNameLayer;
 import gov.nasa.worldwind.util.*;
 import gov.nasa.worldwindx.examples.util.*;
-import layers.mercatortiledimagelayer.tianditu.TiandituMercatorSateLayer;
+import layers.mercatortiledimagelayer.tianditu.*;
 import layers.tiledimagelayer.tianditu.*;
 
 import javax.swing.*;
@@ -53,7 +54,9 @@ public class ApplicationTemplate
             // Setup a select listener for the worldmap click-and-go feature
             this.wwd.addSelectListener(new ClickAndGoSelectListener(this.getWwd(), WorldMapLayer.class));
 
-            this.addLayers();
+            //this.printLayers();
+            this.addTiandituMercatorLayers();
+            this.addTiandituLayers();
 
             this.add((Component) this.wwd, BorderLayout.CENTER);
             if (includeStatusBar)
@@ -83,7 +86,7 @@ public class ApplicationTemplate
             return statusBar;
         }
 
-        protected void addLayers() {
+        protected void printLayers() {
             LayerList layers = wwd.getModel().getLayers();
             System.out.println(layers.toString());
             for(int i = 0; i < layers.size(); i++){
@@ -91,11 +94,65 @@ public class ApplicationTemplate
                 System.out.println(layer.getName());
                 System.out.println(layer.isEnabled());
             }
-            // Tianditu Satellite Image (Mercator)
-            TiandituMercatorSateLayer tiandituMercatorLayer = new TiandituMercatorSateLayer();
-            tiandituMercatorLayer.setEnabled(false);
-            this.addLayer(tiandituMercatorLayer, BINGIMAGERYLAYERNAME);
+        }
 
+        protected void addOSMLayers() {
+            OSMCycleMapLayer osmCycleMapLayer = new OSMCycleMapLayer();
+            osmCycleMapLayer.setEnabled(false);
+            this.addLayer(osmCycleMapLayer, BINGIMAGERYLAYERNAME);
+
+            OSMMapnikLayer osmMapnikLayer = new OSMMapnikLayer();
+            osmMapnikLayer.setEnabled(false);
+            this.addLayer(osmMapnikLayer, BINGIMAGERYLAYERNAME);
+        }
+
+
+        protected  void addTiandituMercatorLayers() {
+            //Tianditu Vector Map (Mercator)
+            TiandituMercatorLayer tiandituMercatorVectorLayer = new TiandituMercatorLayer(TiandituMercatorLayer.TIANDITU_VECTOR);
+            tiandituMercatorVectorLayer.setEnabled(false);
+            this.addLayer(tiandituMercatorVectorLayer, BINGIMAGERYLAYERNAME);
+
+
+            // Tianditu Satellite Image (Mercator)
+            //TiandituMercatorSateLayer tiandituMercatorLayer = new TiandituMercatorSateLayer();
+            TiandituMercatorLayer tiandituMercatorSateLayer = new TiandituMercatorLayer(TiandituMercatorLayer.TIANDITU_SATE);
+            tiandituMercatorSateLayer.setEnabled(false);
+            this.addLayer(tiandituMercatorSateLayer, BINGIMAGERYLAYERNAME);
+
+            // Tianditu Boundary (Mercator)
+            TiandituMercatorLayer tiandituMercatorBoundaryLayer = new TiandituMercatorLayer(TiandituMercatorLayer.TIANDITU_BOUNDARY);
+            tiandituMercatorBoundaryLayer.setEnabled(false);
+            this.addLayer(tiandituMercatorBoundaryLayer, BINGIMAGERYLAYERNAME);
+
+            //Tianditu Vector Chinese Label (Mercator)
+            TiandituMercatorLayer tiandituMercatorVectorLabelZHLayer = new TiandituMercatorLayer(TiandituMercatorLayer.TIANDITU_VECTOR_LABEL_ZH);
+            tiandituMercatorVectorLabelZHLayer.setEnabled(false);
+            this.addLayer(tiandituMercatorVectorLabelZHLayer, PLACENAMESLAYERNAME);
+
+
+            //Tianditu Vector English Label (Mercator)
+            //TiandituMercatorVectorLabelENLayer tiandituMercatorVectorLabelENLayer = new TiandituMercatorVectorLabelENLayer();
+            TiandituMercatorLayer tiandituMercatorVectorLabelENLayer = new TiandituMercatorLayer(TiandituMercatorLayer.TIANDITU_VECTOR_LABEL_EN);
+            tiandituMercatorVectorLabelENLayer.setEnabled(false);
+            this.addLayer(tiandituMercatorVectorLabelENLayer, PLACENAMESLAYERNAME);
+
+
+            //Tianditu Satellite Chineses Label (Mercator)
+            TiandituMercatorLayer tiandituMercatorSateLabelZHLayer = new TiandituMercatorLayer(TiandituMercatorLayer.TIANDITU_SATE_LABEL_ZH);
+            tiandituMercatorSateLabelZHLayer.setEnabled(false);
+            this.addLayer(tiandituMercatorSateLabelZHLayer, PLACENAMESLAYERNAME);
+
+            //Tianditu Satellite English Label (Mercator)
+            //TiandituMercatorSateLabelENLayer tiandituMercatorSateLabelENLayer = new TiandituMercatorSateLabelENLayer();
+            TiandituMercatorLayer tiandituMercatorSateLabelENLayer = new TiandituMercatorLayer(TiandituMercatorLayer.TIANDITU_SATE_LABEL_EN);
+            tiandituMercatorSateLabelENLayer.setEnabled(false);
+            this.addLayer(tiandituMercatorSateLabelENLayer, PLACENAMESLAYERNAME);
+
+
+        }
+
+        protected void addTiandituLayers() {
 
             //Tianditu Vector Map
             //TiandituVectorLayer tiandituVectorLayer = new TiandituVectorLayer();

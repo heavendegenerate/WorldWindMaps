@@ -36,14 +36,16 @@ public abstract class MercatorTiledImageLayer extends AbstractLayer
 {
     // Infrastructure
     private static final LevelComparer levelComparer = new LevelComparer();
-    private final LevelSet levels;
+    protected final LevelSet levels;
     private ArrayList<MercatorTextureTile> topLevels;
     private boolean forceLevelZeroLoads = false;
     private boolean levelZeroLoaded = false;
     private boolean retainLevelZeroTiles = false;
     private String tileCountName;
     @SuppressWarnings({"FieldCanBeLocal"})
-    private double splitScale = 0.9; // TODO: Make configurable
+    //2017-5-19
+    //private double splitScale = 0.9; // TODO: Make configurable
+    private double splitScale = 1.3;
     private boolean useMipMaps = false;
     private ArrayList<String> supportedImageFormats = new ArrayList<String>();
 
@@ -160,7 +162,7 @@ public abstract class MercatorTiledImageLayer extends AbstractLayer
         this.drawBoundingVolumes = drawBoundingVolumes;
     }
 
-    protected LevelSet getLevels()
+    public  LevelSet getLevels()
     {
         return levels;
     }
@@ -840,6 +842,38 @@ public abstract class MercatorTiledImageLayer extends AbstractLayer
             Logging.logger().severe(message);
             throw new IllegalStateException(message);
         }
+
+        double texelSize = 0;
+        Level targetLevel = this.levels.getLastLevel();
+        for (int i = 0; i < this.getLevels().getLastLevel().getLevelNumber(); i++)
+        {
+            if (this.levels.isLevelEmpty(i))
+                continue;
+
+            texelSize = this.levels.getLevel(i).getTexelSize();
+            if (texelSize > resolution)
+                continue;
+
+            targetLevel = this.levels.getLevel(i);
+            break;
+        }
+
+        Logging.logger().info(
+            Logging.getMessage("layers.TiledImageLayer.LevelSelection",
+                targetLevel.getLevelNumber(), texelSize));
+        return targetLevel.getLevelNumber();
+    }
+
+    public int computeLevelForResolution(Sector sector, double resolution)
+    {
+        if (sector == null)
+        {
+            String message = Logging.getMessage("nullValue.SectorIsNull");
+            Logging.logger().severe(message);
+            throw new IllegalStateException(message);
+        }
+
+
 
         double texelSize = 0;
         Level targetLevel = this.levels.getLastLevel();

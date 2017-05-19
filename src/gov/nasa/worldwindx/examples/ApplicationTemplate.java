@@ -15,6 +15,7 @@ import gov.nasa.worldwind.layers.Earth.*;
 import gov.nasa.worldwind.layers.placename.PlaceNameLayer;
 import gov.nasa.worldwind.util.*;
 import gov.nasa.worldwindx.examples.util.*;
+import layers.mercatortiledimagelayer.esri.*;
 import layers.mercatortiledimagelayer.tianditu.*;
 import layers.tiledimagelayer.tianditu.*;
 
@@ -55,6 +56,7 @@ public class ApplicationTemplate
             this.wwd.addSelectListener(new ClickAndGoSelectListener(this.getWwd(), WorldMapLayer.class));
 
             //this.printLayers();
+            this.addEsriLayers();
             this.addTiandituMercatorLayers();
             this.addTiandituLayers();
 
@@ -106,8 +108,24 @@ public class ApplicationTemplate
             this.addLayer(osmMapnikLayer, BINGIMAGERYLAYERNAME);
         }
 
+        protected void addEsriLayers() {
+            EsriWorldStreetMapLayer esriWorldStreetMapLayer = new EsriWorldStreetMapLayer();
+            esriWorldStreetMapLayer.setEnabled(false);
+            this.addLayer(esriWorldStreetMapLayer, BINGIMAGERYLAYERNAME);
 
-        protected  void addTiandituMercatorLayers() {
+            EsriWorldImageryLayer esriWorldImageryLayer = new EsriWorldImageryLayer();
+            esriWorldImageryLayer.setEnabled(false);
+            this.addLayer(esriWorldImageryLayer, BINGIMAGERYLAYERNAME);
+
+            EsriWorldTransportationLayer esriWorldTransportationLayer = new EsriWorldTransportationLayer();
+            esriWorldTransportationLayer.setEnabled(false);
+            this.addLayer(esriWorldTransportationLayer, BINGIMAGERYLAYERNAME);
+
+
+        }
+
+
+        protected void addTiandituMercatorLayers() {
             //Tianditu Vector Map (Mercator)
             TiandituMercatorLayer tiandituMercatorVectorLayer = new TiandituMercatorLayer(TiandituMercatorLayer.TIANDITU_VECTOR);
             tiandituMercatorVectorLayer.setEnabled(false);

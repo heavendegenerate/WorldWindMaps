@@ -20,4 +20,11 @@ An application adds several maps into worldwind demo
 5.Tianditu Vector English label  
 6.Tianditu Satellite Chinese Label  
 7.Tianditu Satellite English Label  
+
+
+### Esri Mercator  
+1. Esri World Street Map  
+2. Esri World Imagery  
+3. Esri World Transpotation  
+
             

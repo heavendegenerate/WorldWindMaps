@@ -10,13 +10,18 @@ import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.awt.WorldWindowGLCanvas;
 import gov.nasa.worldwind.event.*;
 import gov.nasa.worldwind.exception.WWAbsentRequirementException;
+import gov.nasa.worldwind.geom.*;
 import gov.nasa.worldwind.layers.*;
 import gov.nasa.worldwind.layers.Earth.*;
 import gov.nasa.worldwind.layers.placename.PlaceNameLayer;
 import gov.nasa.worldwind.util.*;
 import gov.nasa.worldwindx.examples.util.*;
+import layers.mercatortiledimagelayer.Google.*;
+import layers.mercatortiledimagelayer.baidu.BaiduMercatorMapLayer;
 import layers.mercatortiledimagelayer.esri.*;
+import layers.mercatortiledimagelayer.tencent.*;
 import layers.mercatortiledimagelayer.tianditu.*;
+import layers.tiledimagelayer.baidu.BaiduMapLayer;
 import layers.tiledimagelayer.tianditu.*;
 
 import javax.swing.*;
@@ -59,6 +64,9 @@ public class ApplicationTemplate
             this.addEsriLayers();
             this.addTiandituMercatorLayers();
             this.addTiandituLayers();
+            this.addBaiduLayers();
+            this.addTencentLayers();
+            this.addGoogleLayers();
 
             this.add((Component) this.wwd, BorderLayout.CENTER);
             if (includeStatusBar)
@@ -71,6 +79,8 @@ public class ApplicationTemplate
             // Add controllers to manage highlighting and tool tips.
             this.toolTipController = new ToolTipController(this.getWwd(), AVKey.DISPLAY_NAME, null);
             this.highlightController = new HighlightController(this.getWwd(), SelectEvent.ROLLOVER);
+            //this.jumpHome();
+
         }
 
         protected WorldWindow createWorldWindow()
@@ -86,6 +96,23 @@ public class ApplicationTemplate
         public StatusBar getStatusBar()
         {
             return statusBar;
+        }
+
+        private  void jumpHome() {
+            final double la = 41.7945;
+            final double lo = 123.4407;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(5000);
+                        AppPanel.this.wwd.getView().goTo(new Position(Angle.fromDegrees(la),Angle.fromDegrees(lo),0), 500);
+                    } catch(Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+
         }
 
         protected void printLayers() {
@@ -120,8 +147,6 @@ public class ApplicationTemplate
             EsriWorldTransportationLayer esriWorldTransportationLayer = new EsriWorldTransportationLayer();
             esriWorldTransportationLayer.setEnabled(false);
             this.addLayer(esriWorldTransportationLayer, BINGIMAGERYLAYERNAME);
-
-
         }
 
 
@@ -133,7 +158,7 @@ public class ApplicationTemplate
 
 
             // Tianditu Satellite Image (Mercator)
-            //TiandituMercatorSateLayer tiandituMercatorLayer = new TiandituMercatorSateLayer();
+            //TencentMercatorMapLayer tiandituMercatorLayer = new TencentMercatorMapLayer();
             TiandituMercatorLayer tiandituMercatorSateLayer = new TiandituMercatorLayer(TiandituMercatorLayer.TIANDITU_SATE);
             tiandituMercatorSateLayer.setEnabled(false);
             this.addLayer(tiandituMercatorSateLayer, BINGIMAGERYLAYERNAME);
@@ -213,6 +238,60 @@ public class ApplicationTemplate
             TiandituLayer tiandituSateLabelENLayer = new TiandituLayer(TiandituLayer.TIANDITU_SATE_LABEL_EN);
             tiandituSateLabelENLayer.setEnabled(false);
             this.addLayer(tiandituSateLabelENLayer, PLACENAMESLAYERNAME);
+        }
+
+        protected void addBaiduLayers() {
+            BaiduMercatorMapLayer baiduMercatorMapLayer = new BaiduMercatorMapLayer();
+            baiduMercatorMapLayer.setEnabled(false);
+            this.addLayer(baiduMercatorMapLayer, BINGIMAGERYLAYERNAME);
+
+            BaiduMapLayer baiduMapLayer = new BaiduMapLayer();
+            baiduMapLayer.setEnabled(false);
+            this.addLayer(baiduMapLayer, BINGIMAGERYLAYERNAME);
+        }
+
+        protected void addTencentLayers() {
+            TencentMercatorMapLayer tencentMercatorMapLayer = new TencentMercatorMapLayer();
+            tencentMercatorMapLayer.setEnabled(false);
+            this.addLayer(tencentMercatorMapLayer, BINGIMAGERYLAYERNAME);
+
+            TencentMercatorSateLayer tencentMercatorSateLayer = new TencentMercatorSateLayer();
+            tencentMercatorSateLayer.setEnabled(false);
+            this.addLayer(tencentMercatorSateLayer,BINGIMAGERYLAYERNAME);
+
+            TencentMercatorLabelLayer tencentMercatorLabelLayer = new TencentMercatorLabelLayer();
+            tencentMercatorLabelLayer.setEnabled(false);
+            this.addLayer(tencentMercatorLabelLayer, PLACENAMESLAYERNAME);
+        }
+
+        protected void addGoogleLayers() {
+            GoogleMercatorLayer googleMercatorTerrainLayer = new GoogleMercatorLayer(GoogleMercatorLayer.GOOGLE_TERRAIN);
+            googleMercatorTerrainLayer.setEnabled(false);
+            this.addLayer(googleMercatorTerrainLayer, BINGIMAGERYLAYERNAME);
+
+            GoogleMercatorLayer googleMercatorTerrainLabelZHLayer = new GoogleMercatorLayer(GoogleMercatorLayer.GOOGLE_TERRAIN_LABEL_ZH);
+            googleMercatorTerrainLabelZHLayer.setEnabled(false);
+            this.addLayer(googleMercatorTerrainLabelZHLayer, BINGIMAGERYLAYERNAME);
+
+            GoogleMercatorLayer googleMercatorMapLayer = new GoogleMercatorLayer(GoogleMercatorLayer.GOOGLE_MAP);
+            googleMercatorMapLayer.setEnabled(false);
+            this.addLayer(googleMercatorMapLayer, BINGIMAGERYLAYERNAME);
+
+            //GoogleMercatorSateLayer googleMercatorSateLayer = new GoogleMercatorSateLayer();
+            GoogleMercatorLayer googleMercatorSateLayer = new GoogleMercatorLayer(GoogleMercatorLayer.GOOGLE_SATE);
+            googleMercatorSateLayer.setEnabled(false);
+            this.addLayer(googleMercatorSateLayer, BINGIMAGERYLAYERNAME);
+
+            GoogleMercatorLayer googleMercatorSateLabelZHLayer  = new GoogleMercatorLayer(GoogleMercatorLayer.GOOGLE_SATE_LABEL_ZH);
+            googleMercatorSateLabelZHLayer.setEnabled(false);
+            this.addLayer(googleMercatorSateLabelZHLayer, BINGIMAGERYLAYERNAME);
+
+
+
+            GoogleMercatorLayer googleMercatorLabelLayer = new GoogleMercatorLayer(GoogleMercatorLayer.GOOGLE_LABEL);
+            googleMercatorLabelLayer.setEnabled(false);
+            this.addLayer(googleMercatorLabelLayer, PLACENAMESLAYERNAME);
+
         }
 
         protected void addLayer(Layer layer, String posLayerName) {

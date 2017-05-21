@@ -45,7 +45,7 @@ public abstract class MercatorTiledImageLayer extends AbstractLayer
     @SuppressWarnings({"FieldCanBeLocal"})
     //2017-5-19
     //private double splitScale = 0.9; // TODO: Make configurable
-    private double splitScale = 1.3;
+    private double splitScale = 1.5;
     private boolean useMipMaps = false;
     private ArrayList<String> supportedImageFormats = new ArrayList<String>();
 

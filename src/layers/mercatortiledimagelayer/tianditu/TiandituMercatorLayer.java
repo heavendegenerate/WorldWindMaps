@@ -79,7 +79,7 @@ public class TiandituMercatorLayer extends BasicMercatorTiledImageLayer {
                 params.setValue(AVKey.LAYER_NAME, "eva");
                 break;
             case TIANDITU_BOUNDARY:
-                params.setValue(AVKey.DATA_CACHE_NAME, "Tianditu/Boundary");
+                params.setValue(AVKey.DATA_CACHE_NAME, "Tianditu/BoundaryMercator");
                 params.setValue(AVKey.SERVICE, "http://t0.tianditu.com/ibo_w/wmts");
                 params.setValue(AVKey.LAYER_NAME, "ibo");
                 break;
